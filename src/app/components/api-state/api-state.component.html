@@ -1,0 +1,24 @@
+<ng-container *ngIf="state">
+  <!-- Loading -->
+  <div *ngIf="state.loading"><i class="fa fa-spinner fa-spin"></i> Loading...</div>
+
+  <!-- Error -->
+  <div class="alert alert-danger icon" *ngIf="errorShow && (state.error || state.errorModifying)">
+    <button type="button" class="close float-right" aria-label="Close" (click)="errorShow = false"><span aria-hidden="true">&times;</span></button>
+    {{ state?.error?.message || state?.errorModifying?.message || 'An error occured' }}
+    <div>
+      <hr class="my-2 mx-0" />
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title> See error details </mat-panel-title>
+          </mat-expansion-panel-header>
+          <pre class="mb-0">{{ state.error || state.errorModifying | json }}</pre>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <ng-container *ngIf="!state?.loading && !state?.error"> <ng-content></ng-content> </ng-container>
+</ng-container>

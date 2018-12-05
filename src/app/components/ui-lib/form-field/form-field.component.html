@@ -1,0 +1,13 @@
+<form [formGroup]="formGroup" *ngIf="formGroup && controlName">
+  <mat-form-field appearance="outline">
+      <mat-label>{{ placeholder }}</mat-label>
+    <ng-container *ngIf="status.dirty">
+      <i class="fa fa-thumbs-up green field-icon anim-bounce-in" aria-hidden="true" *ngIf="!status.invalid && status.hasValue"></i>
+      <i class="fa fa-warning red field-icon anim-bounce-in" aria-hidden="true" *ngIf="status.invalid"></i>
+    </ng-container>
+    <input matInput [formControlName]="controlName" [required]="required">
+    <mat-error *ngIf="status.invalid">
+      {{ placeholder }} is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+</form>

@@ -8,7 +8,7 @@ export declare namespace AppStore {
   /** API Store */
   export interface Api {
     [key: string]: ApiState<any>;
-    //users?: any[]; // Store response
+    locations?: ApiState<Models.Location[]>;
     // Example of Store typing with mapped response
     users?: ApiState<Models.User[]>;
   }
@@ -18,6 +18,7 @@ export declare namespace AppStore {
     /** A static snapshot of the UI store, used mainly for multiscreen usage */
     saveState: Ui | null;
     gridState: GridState | null;
+    formLocations: Models.LocationsForm;
     modal: {
       modalId: string;
       options: {};

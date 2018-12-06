@@ -19,6 +19,27 @@ const selectors = {
       return users;
     },
   ),
+  locations: createSelector(
+    (state: AppStore.Root) => state.api.locations,
+    locations => {
+      if (locations && locations.data) {
+        // Modify data before returning to selector
+        locations.data = locations.data.map(location => {
+          return {
+            ...location,
+            price: parseInt(location.listing_price.split('.')[0].replace(/[^a-z0-9]/gi, '')) || null,
+            latitude: location.display_lat,
+            longitude: location.display_lng,
+            metadata: {
+              title: location.display_address,
+              description: location.city + ' ' + location.county
+            }
+          };
+        });
+      }
+      return locations;
+    },
+  ),
 };
 
 @Injectable({
@@ -26,7 +47,7 @@ const selectors = {
 })
 export class ApiSelectorsService {
   public users$ = this.store.select(selectors.users); // Memoized selector
-  // public users$ = this.store.select(store => store.api.users);
+  public locations$ = this.store.select(selectors.locations);
 
   constructor(private store: Store<AppStore.Root>) {}
 

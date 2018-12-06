@@ -23,6 +23,7 @@ export declare namespace Models {
   }
 
   export interface Location {
+    price?: number;
     property_id: number;
     display_lat: number;
     display_lng: number;
@@ -46,6 +47,19 @@ export declare namespace Models {
     year_built: number;
     listing_status: string;
     listing_status_standardized: string;
+    photo_url: string;
+    thumbnail_url: string;
+  }
+
+  export interface LocationsForm {
+    zip: number;
+    priceLow: number;
+    priceHigh: number;
+    bedroomsMin: number;
+    bedroomsMax: number;
+    homeTypes: string;
+    sqFootageMin: number;
+    sqFootageMax: number;
   }
 
   export interface User {

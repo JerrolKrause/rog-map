@@ -11,6 +11,12 @@ import { Models } from '$models';
 // import { environment } from '$env';
 
 export const ApiMap = {
+  locations: {
+    endpoint: 'assets/mock-data/locations.json',
+    storeProperty: ApiProps.locations,
+    nestedProp: 'data',
+    entity: createEntity<Models.Location>('property_id'),
+  },
   // Users Example
   users: {
     endpoint: '//jsonplaceholder.typicode.com/users',

@@ -20,6 +20,10 @@ export class ApiService extends ApiHttpService {
   // Base Url
   // environment.endpoints.apiUrl
 
+  public locations = {
+    get: (update?: boolean) => this.getStore<Models.Location[]>(ApiMap.locations.endpoint, ApiMap.locations, update),
+  };
+
   /** Users endpoint */
   public users = {
     get: (update?: boolean) => this.getStore<Models.User[]>(ApiMap.users.endpoint, ApiMap.users, update),

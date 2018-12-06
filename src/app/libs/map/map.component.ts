@@ -129,11 +129,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
 
     // If map is loaded and present
     if (this.isLoaded && this.map) {
-      // If new locations are passed down, update map
-      if (model.locations) {
-        this.mapInit();
-      }
-
+      
       // If new push pin radius passed down
       if (model.pushPinRadius) {
         MapObjects.circlesRefresh(this.map, this.options);
@@ -145,6 +141,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       if ((this.locations && this.locations.length) || (Array.isArray(this.locations) && this.locations.length === 0)) {
         MapObjects.removeAll(this.map);
       }
+
+      // If new locations are passed down, update map
+      if (model.locations || model.heatmap) {
+        this.mapInit();
+      }
+
     } // End is loaded
   }
 
@@ -187,7 +189,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       // When the view is changed such as scrolling or zooming
       Microsoft.Maps.Events.addHandler(this.map, 'viewchangeend', () => {
         this.viewProps = MapView.viewChange(this.map, this.viewProps);
-        if (this.viewProps.didZoom && this.heatMapLayer) {
+        if (this.viewProps.didZoom && this.heatMapLayer && this.heatmap) {
           this.heatMapLayer.dispose();
           this.heatMapLayer = MapObjects.heatMapCreate(this.map, this.locations);
         }
@@ -219,14 +221,16 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
           },
         );
       }
+
+      // Clean up any previous instance of heatmap layer
+      if (this.heatMapLayer) {
+        this.heatMapLayer.dispose();
+      }
+      
       // Check if heatmap or pushpins
       if (this.heatmap) {
         // Load heatmap module
         Microsoft.Maps.loadModule('Microsoft.Maps.HeatMap', () => {
-          // Clean up any previous instance of heatmap layer
-          if (this.heatMapLayer) {
-            this.heatMapLayer.dispose();
-          }
           this.heatMapLayer = MapObjects.heatMapCreate(this.map, this.locations);
         });
       } else {
@@ -247,48 +251,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       window.setTimeout(() => this.mapInit(), 500);
     }
   }
-
-  /**
-   * When the view of the map changes such as scrolling or zooming
-   * map: Microsoft.Maps.Map, viewPropsCurrent: Map.ViewProps, heatMapLayer: Microsoft.Maps.HeatMapLayer
- 
-  private viewChange() {
-    // Get the latest view properties
-    let viewProps = MapView.viewPropsUpdate(this.map);
-
-    // If the view change event was a zoom
-    if (this.viewProps.zoom !== viewProps.zoom) {
-      // If heatmap is present, throw away old layer and regenerate a new one
-      if (this.heatMapLayer) {
-        this.heatMapLayer.dispose();
-        this.heatMapLayer = MapObjects.heatMapCreate(this.map, this.locations);
-      }
-      // Update viewprops to indicate a zoom was performed
-      viewProps = {
-        ...viewProps,
-        didZoom: true,
-      };
-    }
-
-    // If the view change event was a scroll
-    if (
-      this.viewProps.center.latitude !== viewProps.center.latitude ||
-      this.viewProps.center.longitude !== viewProps.center.longitude
-    ) {
-      // Update viewprops to indicate a scroll was performed
-      viewProps = {
-        ...viewProps,
-        didScroll: true,
-      };
-    }
-
-    // Now update viewProps
-    this.viewProps = viewProps;
-
-    // Emit
-    this.viewChanged.emit(this.viewProps);
-  }
-  */
 
   ngOnDestroy() {
     if (this.map) {

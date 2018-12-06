@@ -8,6 +8,7 @@ import { AppSettings } from '../../app.settings';
 import { UIStoreActions } from './ui.actions';
 import { UiSelectorsService } from './ui.selectors.service';
 import { MatTabChangeEvent } from '@angular/material';
+import { Models } from '../../models';
 
 @Injectable({
   providedIn: 'root',
@@ -66,6 +67,16 @@ export class UIStoreService {
   public toggle(prop: string, value: boolean) {
     this.store.dispatch(UIStoreActions.TOGGLES({ prop: prop, value: value }));
   }
+
+  /**
+   * Change a toggle which is just a boolean in a dictionary
+   * @param prop - Property to set, corresponds to toggle$ in the ui.select service
+   * @param value - T/F
+   */
+  public formLocationChange(form: Models.LocationsForm) {
+    this.store.dispatch(UIStoreActions.FORM_LOCATIONS(form));
+  }
+
 
   /**
    * Toggle sidebar

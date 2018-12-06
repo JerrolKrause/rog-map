@@ -1,5 +1,6 @@
 import actionCreatorFactory from 'typescript-fsa';
 import { AppStore } from '$shared';
+import { Models } from '../../models';
 
 const actionCreator = actionCreatorFactory('ui');
 
@@ -12,6 +13,7 @@ export const UIStoreActions = {
     options: { size: 'sm' | 'lg' | 'xl' | 'full' };
     data: any;
   }>('MODAL_OPEN'),
+  FORM_LOCATIONS: actionCreator<Models.LocationsForm>('FORM_LOCATIONS'),
   MODAL_UNLOAD: actionCreator<null>('MODAL_UNLOAD'),
   TAB_CHANGE: actionCreator<{ tabInstanceId: string; tabId: number }>('TAB_CHANGE'),
   TOGGLES: actionCreator<AppStore.Toggles>('TOGGLES'),

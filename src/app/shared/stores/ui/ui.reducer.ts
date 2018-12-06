@@ -9,6 +9,7 @@ const initialState: AppStore.Ui = {
   saveState: null,
   modal: null,
   gridState: {},
+  formLocations: null,
   tabsActive: {},
   toggles: {},
 };
@@ -26,6 +27,10 @@ export function UIReducer(state = initialState, action: Action) {
 
   if (isType(action, UIStoreActions.MODAL_OPEN)) {
     state.modal = { ...action.payload };
+  }
+
+  if (isType(action, UIStoreActions.FORM_LOCATIONS)) {
+    state.formLocations = { ...action.payload };
   }
 
   if (isType(action, UIStoreActions.MODAL_UNLOAD)) {

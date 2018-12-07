@@ -33,6 +33,19 @@
             formControlName="priceHigh"
           />
         </div>
+        <div class="form-group mx-sm-3">
+            <button mat-button class="mat-reverse" [matMenuTriggerFor]="appMenu">
+                Home Type <i class="fa fa-caret-down ml-1" aria-hidden="true"></i>
+              </button>
+            <mat-menu #appMenu="matMenu">
+              <div class="p-2">
+                <div><mat-checkbox>Single Family</mat-checkbox></div>
+                <div><mat-checkbox>Multi Family</mat-checkbox></div>
+                <div><mat-checkbox>Townhome</mat-checkbox></div>
+                <div><mat-checkbox>Condo</mat-checkbox></div>
+              </div>
+            </mat-menu> 
+        </div>
         <button class="btn btn-primary btn-sm mr-0" (click)="locationsUpdate()">Update!</button>
       </form>
     </div>

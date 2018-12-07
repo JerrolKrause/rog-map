@@ -3,7 +3,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 import { ApiService } from '$api';
 import { UIStoreService } from '$ui';
-import { map, filter } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Models } from 'src/app/shared/models';
 import { combineLatest } from 'rxjs/internal/observable/combineLatest';
 import { FormGroup, FormBuilder } from '@angular/forms';
@@ -29,6 +29,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         formValues: result[1],
       };
     }),
+    // filter(result => result.locations[]),
+    
     map(result => this.locationsFilter(result)),
   );
 
@@ -81,7 +83,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (result.locations) {
       return result.locations.filter((location, i) => {
          if ( i < 3) {
-          console.log(result.formValues.priceLow, location.price);
+          // console.log(result.formValues.priceLow, location.price);
         }
 
         // Zip code check

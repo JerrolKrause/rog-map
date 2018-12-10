@@ -16,7 +16,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  public heatMap = false;
+  public heatMap = true;
 
   public formLocations: FormGroup;
 
@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       };
     }),
     // filter(result => result.locations[]),
-    
+
     map(result => this.locationsFilter(result)),
   );
 
@@ -49,6 +49,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       homeTypes: ['', []],
       sqFootageMin: ['', []],
       sqFootageMax: ['', []],
+      is_single_family: [false, []],
+      is_multi_family: [false, []],
+      is_townhouse: [false, []],
+      is_condo: [false, []],
     });
 
     this.api.locations.get().subscribe(locations => {
@@ -66,7 +70,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     // On intial load, rehydrate form with original values
-    this.ui.select.formLocations$.subscribe(form => this.formLocations.patchValue(form)).unsubscribe();
+    this.ui.select.formLocations$
+      .subscribe(form => {
+        if (form) {
+          this.formLocations.patchValue(form);
+        }
+      })
+      .unsubscribe();
 
     this.locationsVisible$.subscribe(res => console.warn(res));
   }
@@ -80,14 +90,18 @@ export class HomeComponent implements OnInit, OnDestroy {
    *
    */
   private locationsFilter = (result: { locations: Models.Location[]; formValues: any }) => {
-    if (result.locations) {
+    console.log(result.formValues);
+    if (result.locations && result.formValues) {
       return result.locations.filter((location, i) => {
-         if ( i < 3) {
+        if (i < 3) {
           // console.log(result.formValues.priceLow, location.price);
         }
 
         // Zip code check
-        if (result.formValues.zip.toString() !== '' && location.zip_code.toString() !== result.formValues.zip.toString()) {
+        if (
+          result.formValues.zip.toString() !== '' &&
+          location.zip_code.toString() !== result.formValues.zip.toString()
+        ) {
           return false;
         }
 
@@ -98,6 +112,55 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         // Low price check
         if (result.formValues.priceHigh !== '' && location.price > parseInt(result.formValues.priceHigh)) {
+          return false;
+        }
+
+
+        // Min bedrooms
+        if (result.formValues.bedroomsMin !== '' && location.total_bedrooms < parseInt(result.formValues.bedroomsMin)) {
+          return false;
+        }
+
+        // Min bedrooms
+        if (result.formValues.bedroomsMax !== '' && location.total_bedrooms > parseInt(result.formValues.bedroomsMax)) {
+          return false;
+        }
+
+
+        // Home types need to match on ANY, if a single hometype parameter matches then return true
+        let hasHomeType = false;
+
+        // Single family
+        if (result.formValues.is_single_family !== false && location.is_single_family !== '') {
+          hasHomeType = true;
+        }
+
+        // Multi-family
+        if (result.formValues.is_multi_family !== false && location.is_multi_family !== '') {
+          hasHomeType = true;
+        }
+
+        // Townhomes
+        if (result.formValues.is_townhouse !== false && location.is_townhouse !== '') {
+          hasHomeType = true;
+        }
+
+        // Condos
+        if (result.formValues.is_condo !== false && location.is_condo !== '') {
+          hasHomeType = true;
+        }
+
+        // If ALL hometypes are false then show all
+        if (
+          result.formValues.is_single_family === false &&
+          result.formValues.is_multi_family === false &&
+          result.formValues.is_townhouse === false &&
+          result.formValues.is_condo === false
+        ) {
+          hasHomeType = true;
+        }
+
+        if (!hasHomeType) {
           return false;
         }
 

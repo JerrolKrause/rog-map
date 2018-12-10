@@ -1,30 +1,50 @@
 <div id="app-home" *ngIf="{ locations: locations$ | async, locationsVisible: locationsVisible$ | async } as route">
   <app-api-state [state]="route.locations">
     <div class="container-fluid py-2">
+      <div class="float-right">
+        <button class="btn btn-primary btn-sm mr-0" (click)="locationsUpdate()">
+          <i class="fa fa-search" aria-hidden="true"></i> Search!
+        </button>
+      </div>
       <form class="form-inline" id="formLocations" [formGroup]="formLocations">
-        <div class="btn-group">
-          <div class="btn btn-primary btn-sm " (click)="heatMap = true" [ngClass]="{ active: heatMap }">
-            <i class="fa fa-thermometer-full" aria-hidden="true"></i> Heatmap
+        <div class="input-group input-group-sm mr-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon1">
+              {{ route.locationsVisible | count }} / {{ route.locations.data | count }}
+            </span>
           </div>
-          <div class="btn btn-primary btn-sm" (click)="heatMap = false" [ngClass]="{ active: !heatMap }">
-            <i class="fa fa-map-pin" aria-hidden="true"></i> Pins
-          </div>
-        </div>
-        <div class="form-group mx-sm-3">
-          <label for="zip" class="mr-2">Zip</label>
-          <input type="text" class="form-control form-control-sm" id="zip" placeholder="" formControlName="zip" />
+          <div class="input-group-append"><span class="input-group-text" id="basic-addon1">Results</span></div>
         </div>
 
-        <div class="form-group mx-sm-3">
-          <label for="priceLow" class="mr-2">Price Range</label>
+        <!-- Map type toggle -->
+        <div class="btn-group mr-3">
+          <button mat-button class="btn" (click)="heatMap = true" [ngClass]="{ active: heatMap }">
+            <i class="fa fa-thermometer-full" aria-hidden="true"></i> Heatmap
+          </button>
+          <button mat-button class="btn" (click)="heatMap = false" [ngClass]="{ active: !heatMap }">
+            <i class="fa fa-map-pin" aria-hidden="true"></i> Pins
+          </button>
+        </div>
+
+        <!-- Zip code -->
+        <div class="input-group input-group-sm mb-0 mr-3">
+          <div class="input-group-prepend"><label for="zip" class="input-group-text" id="basic-addon1">Zip</label></div>
+          <input type="text" class="form-control" placeholder="" id="zip" aria-label="Zip" formControlName="zip" />
+        </div>
+
+        <!-- Price range -->
+        <div class="input-group input-group-sm mb-0 mr-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="priceLow"><i class="fa fa-usd" aria-hidden="true"></i></label>
+          </div>
           <input
             type="text"
-            class="form-control form-control-sm"
             id="priceLow"
+            class="form-control form-control-sm"
             placeholder=""
             formControlName="priceLow"
           />
-          <span class="px-2">-</span>
+          <div class="input-group-prepend"><label class="input-group-text" for="priceHigh">-</label></div>
           <input
             type="text"
             class="form-control form-control-sm"
@@ -33,23 +53,48 @@
             formControlName="priceHigh"
           />
         </div>
-        <div class="form-group mx-sm-3">
-            <button mat-button class="mat-reverse" [matMenuTriggerFor]="appMenu">
-                Home Type <i class="fa fa-caret-down ml-1" aria-hidden="true"></i>
-              </button>
-            <mat-menu #appMenu="matMenu">
-              <div class="p-2">
-                <div><mat-checkbox>Single Family</mat-checkbox></div>
-                <div><mat-checkbox>Multi Family</mat-checkbox></div>
-                <div><mat-checkbox>Townhome</mat-checkbox></div>
-                <div><mat-checkbox>Condo</mat-checkbox></div>
-              </div>
-            </mat-menu> 
+
+        <!-- Bedrooms -->
+        <div class="input-group input-group-sm mb-0 mr-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="bedroomsMin"><i class="fa fa-bed" aria-hidden="true"></i></label>
+          </div>
+          <input
+            style="width: 30px;"
+            type="text"
+            class="form-control form-control-sm text-center"
+            id="bedroomsMin"
+            placeholder=""
+            formControlName="bedroomsMin"
+          />
+          <div class="input-group-prepend"><label class="input-group-text" for="bedroomsMax">-</label></div>
+          <input
+            style="width: 30px;"
+            type="text"
+            class="form-control form-control-sm text-center"
+            id="bedroomsMax"
+            placeholder=""
+            formControlName="bedroomsMax"
+          />
         </div>
-        <button class="btn btn-primary btn-sm mr-0" (click)="locationsUpdate()">Update!</button>
+
+        <div class="form-group mr-3">
+          <button mat-button [matMenuTriggerFor]="appMenu">
+            <i class="fa fa-home" aria-hidden="true"></i> Home Type
+            <i class="fa fa-caret-down ml-1" aria-hidden="true"></i>
+          </button>
+          <mat-menu #appMenu="matMenu">
+            <div class="p-2" (click)="$event.stopPropagation()">
+              <div><mat-checkbox formControlName="is_single_family">Single Family</mat-checkbox></div>
+              <div><mat-checkbox formControlName="is_multi_family">Multi Family</mat-checkbox></div>
+              <div><mat-checkbox formControlName="is_townhouse">Townhome</mat-checkbox></div>
+              <div><mat-checkbox formControlName="is_condo">Condo</mat-checkbox></div>
+            </div>
+          </mat-menu>
+        </div>
       </form>
     </div>
-    <div style="height: calc(100vh - 123px);">
+    <div style="height: calc(100vh - 111px);">
       <!-- [pushPinIcon]="'https://www.bingmapsportal.com/Content/images/poi_custom.png'" -->
       <app-map
         [locations]="route?.locationsVisible"

@@ -244,7 +244,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         } else if (this.locations) {
           // Get only location and center viewport
           const element = <Microsoft.Maps.Pushpin>this.map.entities.get(0);
-          this.map.setView({ center: element.getLocation() });
+          if (element) {
+            this.map.setView({ center: element.getLocation() });
+          }
         }
       }
     } else {

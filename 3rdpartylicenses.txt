@@ -852,8 +852,6 @@ MIT
 
 @angular/material/button
 
-@angular/material/menu
-
 @angular/router
 MIT
 
@@ -907,6 +905,8 @@ THE SOFTWARE.
 @angular/material/icon
 
 @angular/material/stepper
+
+@angular/material/menu
 
 @angular/material/checkbox
 

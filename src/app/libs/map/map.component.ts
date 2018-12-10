@@ -62,7 +62,6 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
       showMapTypeSelector: !this.disableMapTypeSelector,
       // disableStreetside: true,
       // disableStreetsideAutoCoverage: true,
-      // showMapTypeSelector: false,
       pushPinsAddable: this.pushPinsAddable,
       pushPinIcon: this.pushPinIcon,
       pushPinRadius: this.pushPinRadius,
@@ -179,8 +178,9 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
    * Create the map and set intial view and properties
    */
   private mapInit() {
+    console.log(this, this.map, this.uniqueId);
     // If map is not present yet, create it
-    if (!this.map) {
+    if (!this.map && document.getElementById(this.uniqueId)) {
       // Create map reference
       this.map = MapObjectTypes.map(this.uniqueId, { ...this.options });
       // Attach infobox to map instance, on default is hidden
@@ -195,10 +195,8 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy
         }
         this.viewChanged.emit(this.viewProps);
       });
-    }
-
-    // Map instance was successfully created
-    if (this.map) {
+      // Bing has a hard time seeing the DOM sometimes, add a check to avoid a map error
+    } else if (this.map && document.getElementById(this.uniqueId)) {
       // Set viewport properties
       this.viewProps = MapView.viewPropsUpdate(this.map);
       // If pushpins enabled

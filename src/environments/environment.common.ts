@@ -2,7 +2,7 @@
 export const common = {
   properties: {
     /** Name of application */
-    appName: 'Angular Starter',
+    appName: 'zONE',
   },
   settings: {
     /** Is an authentication endpoint available? If so make sure to update the endpoints in this file */

@@ -78,7 +78,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       })
       .unsubscribe();
 
-    this.locationsVisible$.subscribe(res => console.warn(res));
+    // this.locationsVisible$.subscribe(res => console.warn(res));
   }
 
   public locationsUpdate() {
@@ -90,7 +90,7 @@ export class HomeComponent implements OnInit, OnDestroy {
    *
    */
   private locationsFilter = (result: { locations: Models.Location[]; formValues: any }) => {
-    console.log(result.formValues);
+    // console.log(result);
     if (result.locations && result.formValues) {
       return result.locations.filter((location, i) => {
         if (i < 3) {
@@ -166,6 +166,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         return true;
       });
+    } else if (result.locations) {
+      return result.locations;
     }
   }
 

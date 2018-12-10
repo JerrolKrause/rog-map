@@ -13,7 +13,7 @@
     "bundle-report": "webpack-bundle-analyzer dist/browser/stats.json",
     "prod": "http-server ./dist/browser -o -g",
     "build:prod": "ng build --target=production --environment=prod",
-    "deploy": "ng build --prod --base-href /angular-starter/ && angular-cli-ghpages --no-silent --dir=dist/browser",
+    "deploy": "ng build --prod --base-href /rog-map/ && angular-cli-ghpages --no-silent --dir=dist/browser",
     "docs": "compodoc -p tsconfig.json",
     "docs:serve": "compodoc -p tsconfig.json -s",
     "docs:watch": "compodoc -p tsconfig.json -s -w",
